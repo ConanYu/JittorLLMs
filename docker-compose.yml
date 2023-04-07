@@ -1,0 +1,17 @@
+global-env: &global-env
+  JittorLLMs_MODEL: chatglm # 模型： chatglm | pangualpha | llama | chatrwkv
+  JT_SAVE_MEM: 1
+  cpu_mem_limit: 16000000000 # 限制cpu最多使用16G
+  device_mem_limit: 8000000000 # 限制device内存（如gpu、tpu等）最多使用8G
+
+services:
+  web:
+    build: services/web
+    container_name: JittorLLMs-Web
+    environment:
+      <<: *global-env
+  api:
+    build: services/api
+    container_name: JittorLLMs-Api
+    environment:
+      <<: *global-env
