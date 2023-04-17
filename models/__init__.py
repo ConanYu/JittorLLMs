@@ -38,10 +38,14 @@ def get_model(args) -> LLMModel:
     globals()[f"get_{model_name}"]()
 
     try:
+        if model_name == "chatglm":
+            import transformers
+            if transformers.__version__ != '4.26.1':
+                raise RuntimeError(f"transformers 版本不匹配 {transformers.__version__} != 4.26.1, 请运行 'python -m pip install -r models/{model_name}/requirements.txt -i https://pypi.jittor.org/simple' ")
         module = importlib.import_module(f"models.{model_name}")
         return module.get_model(args)
     except ModuleNotFoundError:
         traceback.print_exc()
-        print(f"Import Error, maybe the dependencies are not installed, please try 'python3 -m pip install -r models/{model_name}/requirements.txt -i https://pypi.jittor.org/simple'")
-        print(f"导入错误，可能没有安装此模型需要的依赖，请尝试运行 'python3 -m pip install -r models/{model_name}/requirements.txt -i https://pypi.jittor.org/simple'")
+        print(f"Import Error, maybe the dependencies are not installed, please try 'python -m pip install -r models/{model_name}/requirements.txt -i https://pypi.jittor.org/simple'")
+        print(f"导入错误，可能没有安装此模型需要的依赖，请尝试运行 'python -m pip install -r models/{model_name}/requirements.txt -i https://pypi.jittor.org/simple'")
         exit()
